@@ -268,6 +268,7 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .sub-btn:hover{opacity:.85}
 .sub-note{font-size:11px;color:var(--text3);margin-top:12px;transition:color .3s}
 </style>
+<script>var KAVALSIA_HUB_URL="";</script>
 </head>
 <body>
 
@@ -562,7 +563,6 @@ const SITES=[
   {id:'newborniq',            name:'Newborn IQ',            niche:'lifestyle',  color:'#f43f5e'},
   {id:'mochapoo-pets',        name:'MochaPoo Pets',         niche:'lifestyle',  color:'#d97706'},
   {id:'dalmend-home',         name:'Dalmend Home',          niche:'home',       color:'#a78bfa'},
-  {id:'dalmend-gifts',        name:'Dalmend Gifts',         niche:'home',       color:'#fb923c'},
   {id:'travelverge',          name:'Travel Verge',          niche:'travel',     color:'#0ea5e9'},
   {id:'kanona-events',        name:'Kanona Events',         niche:'travel',     color:'#a78bfa'},
   {id:'carverge',             name:'CarVerge',              niche:'auto',       color:'#6366f1'},
@@ -973,15 +973,37 @@ function buildTicker(){
 // ──────────────────────────────────────────────
 // SUBSCRIBE
 // ──────────────────────────────────────────────
-function subscribe(){
+const HUB_API = (typeof KAVALSIA_HUB_URL !== 'undefined' ? KAVALSIA_HUB_URL : '').replace(/\/$/, '');
+
+async function subscribe(){
   const inp=document.getElementById('sub-email');
   const msg=document.getElementById('sub-msg');
+  const btn=document.querySelector('.sub-btn');
   const email=(inp.value||'').trim();
-  if(!email||!email.includes('@')){msg.style.color='#ef4444';msg.textContent='Please enter a valid email address.';return;}
-  msg.style.color='var(--green)';
-  msg.textContent='Subscribed! Welcome to the Nexus weekly digest.';
-  inp.value='';inp.disabled=true;
-  const btn=document.querySelector('.sub-btn');if(btn){btn.disabled=true;btn.style.opacity='.5';}
+  if(!email||!email.includes('@')){msg.style.color='#ef4444';msg.textContent='Please enter a valid email.';return;}
+  msg.style.color='var(--text3)';msg.textContent='Adding you...';
+  if(btn){btn.disabled=true;btn.style.opacity='.6';}
+  try{
+    const url=(HUB_API||'')+'/api/subscribe';
+    const r=await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,list_id:4})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(r.ok&&d.ok){
+      msg.style.color='var(--green)';
+      msg.textContent='You\'re in! First digest lands next publish day.';
+      inp.value='';inp.disabled=true;
+    } else {
+      msg.style.color='#ef4444';
+      msg.textContent=d.error||'Something went wrong - try again.';
+      if(btn){btn.disabled=false;btn.style.opacity='1';}
+    }
+  }catch(e){
+    msg.style.color='#ef4444';msg.textContent='Could not connect - try again later.';
+    if(btn){btn.disabled=false;btn.style.opacity='1';}
+  }
 }
 
 buildTicker();

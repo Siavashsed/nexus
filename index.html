@@ -439,18 +439,10 @@ body.has-marquee .niches-bar{top:86px}
 </div>
 
 <!-- NETWORK MOSAIC -->
-<section class="mosaic-wrap" id="mosaic">
-  <div class="mosaic-inner">
-    <div class="mosaic-head">
-      <div>
-        <div class="mosaic-eyebrow">The Network at a Glance</div>
-        <div class="mosaic-title">28 publications. One ecosystem.</div>
-      </div>
-      <div class="mosaic-sub" id="mosaic-sub">Hover any tile to preview. Click to open.</div>
-    </div>
-    <div class="mosaic-grid" id="mosaic-grid"></div>
-  </div>
-</section>
+<!-- "28 publications. One ecosystem." mosaic section removed per user request:
+     the network does not surface backlinks to its publications anywhere on
+     Nexus. Keep the mosaic-grid JS as a no-op (it just renders into a missing
+     element) so the existing scripts do not throw. -->
 
 <!-- TICKER -->
 <div class="ticker-wrap">

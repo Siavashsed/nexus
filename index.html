@@ -44,7 +44,7 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 
 /* ── HERO ── */
 .hero{position:relative;min-height:88vh;padding-top:58px;overflow:hidden;display:flex;align-items:center}
-#hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.92}
 .hero-fade{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(79,142,247,.06) 0%,transparent 55%),linear-gradient(180deg,transparent 50%,var(--bg) 100%)}
 .hero-inner{position:relative;z-index:2;max-width:1360px;margin:0 auto;padding:60px 28px 80px;width:100%;display:grid;grid-template-columns:1fr 480px;gap:72px;align-items:center}
 .hero-left{}
@@ -708,74 +708,254 @@ const NM=Object.fromEntries(NICHES.map(n=>[n.id,n]));
 const SM=Object.fromEntries(SITES.map(s=>[s.id,s]));
 
 // ──────────────────────────────────────────────
-// THREE.JS - subtle, reduced particles
+// THREE.JS - "Nexus" hero: wireframe knowledge sphere, orbital nodes,
+// depth-faded twinkling starfield, soft parallax. Additive blending +
+// shader-driven sparkle replace the old proximity-line constellation.
 // ──────────────────────────────────────────────
 (function(){
   const canvas=document.getElementById('hero-canvas');
-  if(!window.THREE)return;
+  if(!canvas||!window.THREE) return;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const W=()=>canvas.parentElement.offsetWidth, H=()=>canvas.parentElement.offsetHeight;
+
   const rndr=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   rndr.setPixelRatio(Math.min(devicePixelRatio,2));
   rndr.setSize(W(),H());
-  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(70,W()/H(),.1,800);
-  cam.position.z=50;
-  const N=75, SX=100, SY=62, SZ=28, MD=20, ML=600;
-  const pts=Array.from({length:N},()=>({
-    x:(Math.random()-.5)*SX, y:(Math.random()-.5)*SY, z:(Math.random()-.5)*SZ,
-    vx:(Math.random()-.5)*.022, vy:(Math.random()-.5)*.015, vz:(Math.random()-.5)*.008
-  }));
-  const pGeo=new THREE.BufferGeometry();
-  const pPos=new Float32Array(N*3), pCol=new Float32Array(N*3);
-  for(let i=0;i<N;i++){
-    const t=Math.random();
-    if(t<.2){pCol[i*3]=.31;pCol[i*3+1]=.56;pCol[i*3+2]=.97;}
-    else if(t<.35){pCol[i*3]=.51;pCol[i*3+1]=.55;pCol[i*3+2]=.97;}
-    else{pCol[i*3]=.7;pCol[i*3+1]=.78;pCol[i*3+2]=.92;}
+  rndr.setClearColor(0x000000,0);
+
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(55,W()/H(),.1,2000);
+  cam.position.set(0,0,140);
+
+  // ── Soft circular sprite generated on the fly (no asset loads).
+  function discTexture(){
+    const c=document.createElement('canvas'); c.width=c.height=128;
+    const g=c.getContext('2d');
+    const grad=g.createRadialGradient(64,64,0,64,64,64);
+    grad.addColorStop(0,'rgba(255,255,255,1)');
+    grad.addColorStop(.25,'rgba(255,255,255,.85)');
+    grad.addColorStop(.55,'rgba(255,255,255,.18)');
+    grad.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=grad; g.fillRect(0,0,128,128);
+    const t=new THREE.Texture(c); t.needsUpdate=true; return t;
   }
-  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
-  pGeo.setAttribute('color',new THREE.BufferAttribute(pCol,3));
-  scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({size:.35,vertexColors:true,transparent:true,opacity:.7,sizeAttenuation:true})));
-  const lGeo=new THREE.BufferGeometry();
-  const lPos=new Float32Array(ML*6), lCol=new Float32Array(ML*6);
-  lGeo.setAttribute('position',new THREE.BufferAttribute(lPos,3));
-  lGeo.setAttribute('color',new THREE.BufferAttribute(lCol,3));
-  scene.add(new THREE.LineSegments(lGeo,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:1})));
+  const SOFT=discTexture();
+
+  // ── Twinkling starfield (deep background, shader-driven).
+  const STAR_N=900;
+  const starGeo=new THREE.BufferGeometry();
+  const sPos=new Float32Array(STAR_N*3);
+  const sCol=new Float32Array(STAR_N*3);
+  const sPhase=new Float32Array(STAR_N);
+  const sSize=new Float32Array(STAR_N);
+  const PALETTE=[
+    [0.31,0.56,0.97], // blue
+    [0.51,0.55,0.97], // indigo
+    [0.18,0.85,0.63], // green
+    [0.78,0.86,1.00], // soft white-blue
+    [0.78,0.86,1.00],
+  ];
+  for(let i=0;i<STAR_N;i++){
+    // Cluster denser near center for depth feel.
+    const r=Math.pow(Math.random(),.6)*380+30;
+    const t=Math.random()*Math.PI*2;
+    const p=Math.acos(2*Math.random()-1);
+    sPos[i*3]  = r*Math.sin(p)*Math.cos(t);
+    sPos[i*3+1]= r*Math.sin(p)*Math.sin(t)*.55;  // flatten vertically
+    sPos[i*3+2]= r*Math.cos(p) - 80;
+    const c=PALETTE[(Math.random()*PALETTE.length)|0];
+    sCol[i*3]=c[0]; sCol[i*3+1]=c[1]; sCol[i*3+2]=c[2];
+    sPhase[i]=Math.random()*Math.PI*2;
+    sSize[i]= .6 + Math.pow(Math.random(),3)*4.5;
+  }
+  starGeo.setAttribute('position',new THREE.BufferAttribute(sPos,3));
+  starGeo.setAttribute('color',new THREE.BufferAttribute(sCol,3));
+  starGeo.setAttribute('phase',new THREE.BufferAttribute(sPhase,1));
+  starGeo.setAttribute('size',new THREE.BufferAttribute(sSize,1));
+
+  const starMat=new THREE.ShaderMaterial({
+    transparent:true,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending,
+    uniforms:{
+      uTime:{value:0},
+      uPR:{value:rndr.getPixelRatio()},
+      uTex:{value:SOFT},
+    },
+    vertexShader:`
+      attribute vec3 color;
+      attribute float phase;
+      attribute float size;
+      varying vec3 vColor;
+      varying float vTwinkle;
+      uniform float uTime;
+      uniform float uPR;
+      void main(){
+        vColor=color;
+        float tw = .55 + .45*sin(uTime*1.6 + phase*3.1);
+        vTwinkle = tw;
+        vec4 mv = modelViewMatrix * vec4(position,1.);
+        gl_Position = projectionMatrix * mv;
+        // Size attenuated by distance, scaled by DPR.
+        gl_PointSize = size * uPR * (220. / -mv.z);
+      }`,
+    fragmentShader:`
+      varying vec3 vColor;
+      varying float vTwinkle;
+      uniform sampler2D uTex;
+      void main(){
+        vec4 t = texture2D(uTex, gl_PointCoord);
+        float a = t.a * vTwinkle;
+        if (a < 0.02) discard;
+        gl_FragColor = vec4(vColor, a);
+      }`,
+    vertexColors:true,
+  });
+  scene.add(new THREE.Points(starGeo,starMat));
+
+  // ── Central knowledge "core": layered wireframe spheres at different LODs
+  // give a subtle moiré-like depth without any post-processing.
+  const coreGroup=new THREE.Group();
+  scene.add(coreGroup);
+
+  const SPHERE_R=22;
+  const wire1=new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(SPHERE_R,3),12),
+    new THREE.LineBasicMaterial({color:0x4f8ef7,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false})
+  );
+  const wire2=new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(SPHERE_R*1.18,2),12),
+    new THREE.LineBasicMaterial({color:0x818cf8,transparent:true,opacity:.32,blending:THREE.AdditiveBlending,depthWrite:false})
+  );
+  const wire3=new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(SPHERE_R*1.42,1),12),
+    new THREE.LineBasicMaterial({color:0x2ed9a0,transparent:true,opacity:.22,blending:THREE.AdditiveBlending,depthWrite:false})
+  );
+  coreGroup.add(wire1,wire2,wire3);
+
+  // Inner ghost sphere to occlude stars behind the core for a sense of mass.
+  const innerSphere=new THREE.Mesh(
+    new THREE.SphereGeometry(SPHERE_R*.95,32,32),
+    new THREE.MeshBasicMaterial({color:0x041020,transparent:true,opacity:.85,depthWrite:true})
+  );
+  coreGroup.add(innerSphere);
+
+  // Center glow halo (sprite) for a faux-bloom feel.
+  const haloMat=new THREE.SpriteMaterial({map:SOFT,color:0x4f8ef7,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false});
+  const halo=new THREE.Sprite(haloMat);
+  halo.scale.set(SPHERE_R*5.2,SPHERE_R*5.2,1);
+  coreGroup.add(halo);
+
+  // ── Orbital nodes: each "publication" as a glowing satellite on a slow,
+  // tilted orbit. Positions are precomputed; per-frame we just spin them.
+  const NODE_N=22;
+  const nodeGeo=new THREE.BufferGeometry();
+  const nPos=new Float32Array(NODE_N*3);
+  const nCol=new Float32Array(NODE_N*3);
+  const nSize=new Float32Array(NODE_N);
+  const orbits=[];
+  for(let i=0;i<NODE_N;i++){
+    const radius = SPHERE_R*1.7 + Math.random()*SPHERE_R*2.4;
+    const speed  = (.10 + Math.random()*.18) * (Math.random()<.5?-1:1);
+    const tilt   = (Math.random()-.5)*Math.PI*.55;
+    const phase  = Math.random()*Math.PI*2;
+    orbits.push({radius,speed,tilt,phase});
+    const c=PALETTE[(Math.random()*PALETTE.length)|0];
+    nCol[i*3]=c[0]; nCol[i*3+1]=c[1]; nCol[i*3+2]=c[2];
+    nSize[i]= 5 + Math.random()*9;
+  }
+  nodeGeo.setAttribute('position',new THREE.BufferAttribute(nPos,3));
+  nodeGeo.setAttribute('color',new THREE.BufferAttribute(nCol,3));
+  nodeGeo.setAttribute('aSize',new THREE.BufferAttribute(nSize,1));
+
+  const nodeMat=new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{uPR:{value:rndr.getPixelRatio()},uTex:{value:SOFT}},
+    vertexShader:`
+      attribute vec3 color;
+      attribute float aSize;
+      varying vec3 vColor;
+      uniform float uPR;
+      void main(){
+        vColor=color;
+        vec4 mv = modelViewMatrix * vec4(position,1.);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = aSize * uPR * (240. / -mv.z);
+      }`,
+    fragmentShader:`
+      varying vec3 vColor;
+      uniform sampler2D uTex;
+      void main(){
+        vec4 t = texture2D(uTex, gl_PointCoord);
+        if (t.a < 0.02) discard;
+        gl_FragColor = vec4(vColor, t.a);
+      }`,
+    vertexColors:true,
+  });
+  scene.add(new THREE.Points(nodeGeo,nodeMat));
+
+  // ── Mouse parallax (subtle).
   let mx=0,my=0;
-  document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5);my=-(e.clientY/innerHeight-.5);});
-  (function animate(){
+  document.addEventListener('mousemove',e=>{
+    mx=(e.clientX/innerWidth-.5);
+    my=-(e.clientY/innerHeight-.5);
+  });
+
+  const clock=new THREE.Clock();
+  let lastT=0;
+  function animate(){
     requestAnimationFrame(animate);
-    cam.position.x+=(mx*4-cam.position.x)*.02;
-    cam.position.y+=(my*2.5-cam.position.y)*.02;
-    cam.lookAt(scene.position);
-    for(let i=0;i<N;i++){
-      const p=pts[i];
-      p.x+=p.vx;p.y+=p.vy;p.z+=p.vz;
-      if(Math.abs(p.x)>SX/2)p.vx*=-1;
-      if(Math.abs(p.y)>SY/2)p.vy*=-1;
-      if(Math.abs(p.z)>SZ/2)p.vz*=-1;
-      pPos[i*3]=p.x;pPos[i*3+1]=p.y;pPos[i*3+2]=p.z;
+    const t=clock.getElapsedTime();
+    const dt=Math.min(.05, t-lastT); lastT=t;
+    const speed = reduceMotion ? .25 : 1;
+
+    starMat.uniforms.uTime.value = t;
+
+    // Camera parallax + slow zoom-breathe.
+    cam.position.x += (mx*8 - cam.position.x)*.04;
+    cam.position.y += (my*5 - cam.position.y)*.04;
+    cam.position.z = 140 + Math.sin(t*.25)*4;
+    cam.lookAt(0,0,0);
+
+    // Core spin: each shell rotates at its own pace for a layered feel.
+    coreGroup.rotation.y += dt*.08*speed;
+    coreGroup.rotation.x = Math.sin(t*.18)*.18;
+    wire1.rotation.y -= dt*.10*speed;
+    wire2.rotation.y += dt*.16*speed;
+    wire2.rotation.x  = Math.sin(t*.21)*.5;
+    wire3.rotation.y -= dt*.22*speed;
+    wire3.rotation.x  = Math.cos(t*.17)*.7;
+
+    // Halo pulse.
+    const pulse = .48 + Math.sin(t*1.1)*.10;
+    haloMat.opacity = pulse;
+
+    // Update orbital nodes.
+    for(let i=0;i<NODE_N;i++){
+      const o=orbits[i];
+      const ang = t*o.speed*speed + o.phase;
+      const x = Math.cos(ang)*o.radius;
+      const z = Math.sin(ang)*o.radius;
+      // Tilt orbit plane.
+      const y = Math.sin(o.tilt)*z;
+      const z2= Math.cos(o.tilt)*z;
+      nPos[i*3]   = x;
+      nPos[i*3+1] = y;
+      nPos[i*3+2] = z2;
     }
-    pGeo.attributes.position.needsUpdate=true;
-    let li=0;
-    for(let i=0;i<N&&li<ML;i++) for(let j=i+1;j<N&&li<ML;j++){
-      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, dz=pts[i].z-pts[j].z;
-      const d2=dx*dx+dy*dy+dz*dz;
-      if(d2<MD*MD){
-        const a=(1-Math.sqrt(d2)/MD)*.18;
-        lPos[li*6]=pts[i].x;lPos[li*6+1]=pts[i].y;lPos[li*6+2]=pts[i].z;
-        lPos[li*6+3]=pts[j].x;lPos[li*6+4]=pts[j].y;lPos[li*6+5]=pts[j].z;
-        const c=a*5;
-        lCol[li*6]=.31*c;lCol[li*6+1]=.56*c;lCol[li*6+2]=.97*c;
-        lCol[li*6+3]=.31*c;lCol[li*6+4]=.56*c;lCol[li*6+5]=.97*c;
-        li++;
-      }
-    }
-    lGeo.setDrawRange(0,li*2);
-    lGeo.attributes.position.needsUpdate=true;
-    lGeo.attributes.color.needsUpdate=true;
+    nodeGeo.attributes.position.needsUpdate=true;
+
     rndr.render(scene,cam);
-  })();
-  window.addEventListener('resize',()=>{rndr.setSize(W(),H());cam.aspect=W()/H();cam.updateProjectionMatrix();});
+  }
+  animate();
+
+  window.addEventListener('resize',()=>{
+    rndr.setSize(W(),H());
+    cam.aspect=W()/H();
+    cam.updateProjectionMatrix();
+    starMat.uniforms.uPR.value = rndr.getPixelRatio();
+    nodeMat.uniforms.uPR.value = rndr.getPixelRatio();
+  });
 })();
 
 // ──────────────────────────────────────────────
@@ -786,17 +966,24 @@ let activeNiche='all', searchQ='', allArts=[], siteCounts={};
 // ──────────────────────────────────────────────
 // NICHE TABS + SHOWCASE
 // ──────────────────────────────────────────────
+function activeNicheIds(){
+  // Only niches with at least one published article. 'all' is always included.
+  const ids=new Set(allArts.map(a=>a._niche).filter(Boolean));
+  return NICHES.filter(n=>n.id==='all' || ids.has(n.id));
+}
+
 function buildTabs(){
-  document.getElementById('niche-tabs').innerHTML=NICHES.map(n=>`
-    <button class="niche-tab${n.id==='all'?' active':''}" data-n="${n.id}" onclick="selectNiche('${n.id}')">
+  const live=activeNicheIds();
+  document.getElementById('niche-tabs').innerHTML=live.map(n=>`
+    <button class="niche-tab${n.id===activeNiche?' active':''}" data-n="${n.id}" onclick="selectNiche('${n.id}')">
       <span class="nt-dot" style="background:${n.color}"></span>${n.label}
     </button>`).join('');
 }
 
 function buildNicheCards(){
   const showcase=document.getElementById('niches-grid');
-  const nonAll=NICHES.filter(n=>n.id!=='all');
-  showcase.innerHTML=nonAll.map(n=>{
+  const live=activeNicheIds().filter(n=>n.id!=='all');
+  showcase.innerHTML=live.map(n=>{
     const arts=allArts.filter(a=>a._niche===n.id);
     const latest=arts[0];
     return `<div class="niche-card" onclick="selectNiche('${n.id}')" style="--nc:${n.color}">
@@ -807,10 +994,10 @@ function buildNicheCards(){
       </div>
       <div class="nc-name">${n.label}</div>
       <div class="nc-count">${arts.length} article${arts.length!==1?'s':''}</div>
-      ${latest?`<div class="nc-latest">${latest.title||''}</div>`:'<div class="nc-latest" style="opacity:.4">No articles yet</div>'}
+      ${latest?`<div class="nc-latest">${latest.title||''}</div>`:''}
     </div>`;
   }).join('');
-  document.getElementById('showcase-sub').textContent=`${nonAll.length} categories - ${allArts.length} articles total`;
+  document.getElementById('showcase-sub').textContent=`${live.length} categor${live.length===1?'y':'ies'} - ${allArts.length} articles total`;
 }
 
 function nicheIconPath(id){
@@ -855,6 +1042,9 @@ async function fetchSite(site){
 }
 
 async function loadAll(){
+  // Tabs are rebuilt after every site loads so only niches with at least one
+  // published article appear (no empty topics). Build once first so the bar
+  // isn't empty during the initial paint.
   buildTabs();
   let done=0;
   const prog=document.getElementById('load-prog');
@@ -866,13 +1056,16 @@ async function loadAll(){
     if(arts.length){
       allArts.push(...arts);
       updateStats();
+      buildTabs();
       if(allArts.length>=6&&document.getElementById('loading-state').style.display!=='none') showFeed();
     }
   }));
   updateStats();
+  buildTabs();
   showFeed();
   buildNicheCards();
   buildSiteGrid();
+  if(typeof window.buildNicheStrip==='function') window.buildNicheStrip();
   document.getElementById('loading-state').style.display='none';
   document.getElementById('feed-out').style.display='block';
   document.getElementById('sites-sec').style.display='block';
@@ -1031,6 +1224,18 @@ function cleanBody(el,siteId){
   ['nav','header','footer','.nav','.site-nav','.top-nav','.footer','.sidebar',
    '#comments-section','.newsletter-section','.newsletter','.related','script','style','noscript','form'].forEach(s=>{
     el.querySelectorAll(s).forEach(n=>n.remove());
+  });
+  // Strip the article's own headline so we don't render the title twice
+  // (the Nexus reader already shows #rtitle above #rbody). Drops the first
+  // h1, plus any h1/h2 whose text matches the current article title.
+  const _norm = s => (s||'').replace(/\s+/g,' ').trim().toLowerCase();
+  const _curTitle = _norm(document.getElementById('rtitle')?.textContent);
+  let _h1Dropped = false;
+  el.querySelectorAll('h1, h2').forEach(h=>{
+    const t = _norm(h.textContent);
+    if (!t) return;
+    if (h.tagName === 'H1' && !_h1Dropped) { h.remove(); _h1Dropped = true; return; }
+    if (_curTitle && t === _curTitle) h.remove();
   });
   el.querySelectorAll('img').forEach(img=>{
     const src=img.getAttribute('src')||'';
@@ -1250,11 +1455,24 @@ loadAll();
   function buildNicheStrip(){
     const strip = document.getElementById('niche-strip');
     if(!strip || typeof NICHES==='undefined') return;
-    const counts = {};
-    SITES.forEach(s=>{counts[s.niche]=(counts[s.niche]||0)+1;});
-    const all = [{id:'all',label:'All Niches',color:'#4f8ef7',icon:'&#9670;'}].concat(NICHES.filter(n=>n.id!=='all'));
+    // Count by published articles (window.allArts populated by main feed loader)
+    // so only niches that actually have content show up.
+    const arts = (window.allArts || []);
+    const artCounts = {};
+    arts.forEach(a=>{ if(a && a._niche) artCounts[a._niche] = (artCounts[a._niche]||0)+1; });
+    const liveNiches = NICHES.filter(n => n.id!=='all' && (artCounts[n.id]||0) > 0);
+    // If feed hasn't loaded yet, fall back to site counts so the bar isn't empty.
+    const useFallback = liveNiches.length === 0;
+    const siteCounts = {};
+    SITES.forEach(s=>{siteCounts[s.niche]=(siteCounts[s.niche]||0)+1;});
+    const niches = useFallback
+      ? NICHES.filter(n=>n.id!=='all' && (siteCounts[n.id]||0) > 0)
+      : liveNiches;
+    const all = [{id:'all',label:'All Niches',color:'#4f8ef7',icon:'&#9670;'}].concat(niches);
     strip.innerHTML = all.map(n=>{
-      const cnt = n.id==='all' ? SITES.length : (counts[n.id]||0);
+      const cnt = n.id==='all'
+        ? (useFallback ? SITES.length : arts.length)
+        : (useFallback ? (siteCounts[n.id]||0) : (artCounts[n.id]||0));
       return `<button class="np-pill${n.id==='all'?' active':''}" data-n="${n.id}" style="--pc:${n.color}">
         <span class="np-ic" style="background:${n.color}">${n.icon||''}</span>
         ${n.label}
@@ -1284,6 +1502,8 @@ loadAll();
     if(first){ first.style.background = first.style.getPropertyValue('--pc'); first.style.color='#fff'; }
   }
   buildNicheStrip();
+  // Expose so the article loader can rebuild it once allArts populates.
+  window.buildNicheStrip = buildNicheStrip;
 
   // ---- Stat ribbon count-up ----
   (function(){

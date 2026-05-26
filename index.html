@@ -1083,15 +1083,31 @@ function showFeed(){
 }
 
 function updateStats(){
-  document.getElementById('h-art').textContent=allArts.length+'+';
-  document.getElementById('nav-cnt').textContent=allArts.length;
+  const unique=dedupeBySource(allArts).length;
+  document.getElementById('h-art').textContent=unique+'+';
+  document.getElementById('nav-cnt').textContent=unique;
 }
 
 // ──────────────────────────────────────────────
 // RENDER FEED
 // ──────────────────────────────────────────────
+function dedupeBySource(arts){
+  // Same article syndicated across multiple sites should appear only once.
+  // Keep the earliest-posted occurrence per normalized title.
+  const sortedAsc=[...arts].sort((x,y)=>(x.posted_iso||x.date_iso||x.date||'').localeCompare(y.posted_iso||y.date_iso||y.date||''));
+  const seen=new Set();
+  const out=[];
+  for(const art of sortedAsc){
+    const key=(art.title||'').trim().toLowerCase().replace(/\s+/g,' ');
+    if(!key||seen.has(key)) continue;
+    seen.add(key);
+    out.push(art);
+  }
+  return out;
+}
+
 function getFiltered(){
-  let a=[...allArts];
+  let a=dedupeBySource(allArts);
   if(activeNiche!=='all') a=a.filter(x=>x._niche===activeNiche);
   if(searchQ){
     const q=searchQ.toLowerCase();

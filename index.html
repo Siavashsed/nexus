@@ -1062,6 +1062,9 @@ async function loadAll(){
       if(allArts.length>=6&&document.getElementById('loading-state').style.display!=='none') showFeed();
     }
   }));
+  // Deduplicate after every site has loaded so that articles syndicated to
+  // multiple sites only appear once. Earliest-posted occurrence wins.
+  allArts=dedupeBySource(allArts);
   updateStats();
   buildTabs();
   showFeed();

@@ -1097,7 +1097,7 @@ function updateStats(){
 function dedupeBySource(arts){
   // Same article syndicated across multiple sites should appear only once.
   // Keep the earliest-posted occurrence per normalized title.
-  const sortedAsc=[...arts].sort((x,y)=>(x.posted_iso||x.date_iso||x.date||'').localeCompare(y.posted_iso||y.date_iso||y.date||''));
+  const sortedAsc=[...arts].sort((x,y)=>(x.date_iso||x.posted_iso||x.date||'').localeCompare(y.date_iso||y.posted_iso||y.date||''));
   const seen=new Set();
   const out=[];
   for(const art of sortedAsc){
@@ -1116,7 +1116,7 @@ function getFiltered(){
     const q=searchQ.toLowerCase();
     a=a.filter(x=>(x.title||'').toLowerCase().includes(q)||(x.meta_description||x.excerpt||'').toLowerCase().includes(q)||(x.category||'').toLowerCase().includes(q)||(x._siteName||'').toLowerCase().includes(q));
   }
-  return a.sort((a,b)=>(b.date||b.published_date||'').localeCompare(a.date||a.published_date||''));
+  return a.sort((a,b)=>(b.date_iso||b.posted_iso||b.date||b.published_date||'').localeCompare(a.date_iso||a.posted_iso||a.date||a.published_date||''));
 }
 
 function fmtDate(d){if(!d)return'';try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch{return d;}}
@@ -1153,7 +1153,7 @@ function renderFeed(){
 }
 
 function renderHeroFeed(){
-  const recent=[...allArts].sort((a,b)=>(b.date||b.published_date||'').localeCompare(a.date||a.published_date||'')).slice(0,5);
+  const recent=[...allArts].sort((a,b)=>(b.date_iso||b.posted_iso||b.date||b.published_date||'').localeCompare(a.date_iso||a.posted_iso||a.date||a.published_date||'')).slice(0,5);
   document.getElementById('hero-feed').innerHTML=recent.map(a=>`
     <div class="hfc" onclick="location.hash='read/${a._site}/${a.slug}'">
       <div class="hfc-site"><span class="hfc-site-dot" style="background:${a._color}"></span>${a._siteName}</div>

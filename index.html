@@ -1256,7 +1256,13 @@ function extractBody(doc){
 
 function cleanBody(el,siteId){
   ['nav','header','footer','.nav','.site-nav','.top-nav','.footer','.sidebar',
-   '#comments-section','.newsletter-section','.newsletter','.related','script','style','noscript','form'].forEach(s=>{
+   '#comments-section','.newsletter-section','.newsletter','.related','script','style','noscript','form',
+   // Strip the article's own kicker/byline strip. Nexus already renders cat
+   // + date + author in #rkicker / #rcat / #rauthor / #rdate above #rbody,
+   // so leaving the inline one in produces the duplicate "AI Copywriting·May
+   // 29, 2026" line shown right under the headline.
+   '.ap-kicker','.art-kicker','.kicker','.article-kicker','.byline','.article-byline',
+   '.post-meta','.entry-meta','.article-meta','.meta-row'].forEach(s=>{
     el.querySelectorAll(s).forEach(n=>n.remove());
   });
   // Strip the article's own headline so we don't render the title twice

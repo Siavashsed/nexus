@@ -682,7 +682,7 @@ const SITES=[
   {id:'onlinebizpro', name:'Online Biz Pro', niche:'business', color:'#f59e0b'},
   {id:'sportiqpro', name:'SportIQ Pro', niche:'health', color:'#ef4444'},
   {id:'datingedge', name:'The Dating Edge', niche:'lifestyle', color:'#f43f5e'},
-  {id:'fitpulsepro', name:'FitPulse Pro', niche:'health', color:'#06b6d4'},
+  {id:'fitpulsepro', name:'FitPulse Pro', niche:'health', color:'#d6ff3f'},
   {id:'supplementverge', name:'Supplement Verge', niche:'health', color:'#84cc16'},
   {id:'ecommerceedge', name:'Ecommerce Edge', niche:'business', color:'#f97316'},
   {id:'insightinsure', name:'Insight Insure', niche:'finance', color:'#0891b2'},
@@ -716,7 +716,7 @@ const SITES=[
   {id:'sportiq-pro', name:'Sportiqpro', niche:'business', color:'#0a0a0a'},
   {id:'makeup-craft', name:'Makeupcraft', niche:'business', color:'#0a0a0a'},
   {id:'dating-edge', name:'The Dating Edge', niche:'business', color:'#0a0a0a'},
-  {id:'fitpulse-pro', name:'fitpulse-pro', niche:'business', color:'#0a0a0a'},
+  {id:'fitpulse-pro', name:'fitpulse-pro', niche:'business', color:'#d6ff3f'},
   {id:'insight-insure', name:'Insight Insure', niche:'business', color:'#0a0a0a'}
 ];
 const NM=Object.fromEntries(NICHES.map(n=>[n.id,n]));
@@ -1052,7 +1052,12 @@ async function fetchSite(site){
     const r=await fetch(`https://siavashsed.github.io/${site.id}/articles.json`,{signal:AbortSignal.timeout(9000)});
     if(!r.ok)return[];
     const d=await r.json();
-    return(Array.isArray(d)?d:[]).map(a=>({...a,_site:site.id,_siteName:site.name,_niche:site.niche,_color:site.color}));
+    // Filter out articles flagged opt-out of cross-network aggregation - used
+    // when the same advertorial runs across multiple sites and we do not want
+    // Nexus to surface near-duplicates.
+    return(Array.isArray(d)?d:[])
+      .filter(a => a && a.aggregate !== false && a.cross_post_exclude !== true)
+      .map(a=>({...a,_site:site.id,_siteName:site.name,_niche:site.niche,_color:site.color}));
   }catch{return[];}
 }
 

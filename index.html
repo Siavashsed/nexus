@@ -150,6 +150,40 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .sc-niche{font-size:10px;color:var(--text3);margin-top:1px}
 .sc-count{font-size:11px;font-weight:700;margin-left:auto;flex-shrink:0}
 
+/* ── HERO TRUST BAR ── */
+.hero-trust{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:4px}
+.hero-trust .ht{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--text2);letter-spacing:.2px}
+.hero-trust .ht svg{width:13px;height:13px;color:var(--green);flex-shrink:0}
+
+/* ── JOIN / APPLY ── */
+.join-wrap{position:relative;padding:84px 28px;border-top:1px solid var(--border);overflow:hidden}
+.join-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 0%,rgba(79,142,247,.08),transparent 60%);pointer-events:none}
+.join-inner{position:relative;z-index:1;max-width:980px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:56px;align-items:center}
+.join-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(46,217,160,.1);border:1px solid rgba(46,217,160,.2);border-radius:20px;padding:5px 14px;font-size:10px;font-weight:700;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.join-h2{font-size:clamp(28px,3.6vw,40px);font-weight:900;line-height:1.08;letter-spacing:-1px;margin-bottom:16px;color:var(--text)}
+.join-lead{font-size:15px;color:var(--text2);line-height:1.7;max-width:420px;margin-bottom:24px}
+.join-steps{display:flex;flex-direction:column;gap:12px}
+.join-step{display:flex;align-items:flex-start;gap:12px;font-size:13.5px;color:var(--text2);line-height:1.5}
+.join-step b{color:var(--text);font-weight:700}
+.join-step-n{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--blue2);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.join-card{background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:28px;box-shadow:0 24px 60px -30px rgba(0,0,0,.6)}
+.join-card-h{font-size:13px;font-weight:800;color:var(--text);letter-spacing:.3px;margin-bottom:4px}
+.join-card-sub{font-size:12px;color:var(--text3);margin-bottom:20px}
+.join-field{margin-bottom:14px}
+.join-field label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:6px}
+.join-field input,.join-field select{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .18s}
+.join-field input:focus,.join-field select:focus{border-color:var(--blue)}
+.join-field input::placeholder{color:var(--text3)}
+.join-submit{width:100%;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:13px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background .2s;margin-top:4px}
+.join-submit:hover{background:#6a9ff8}
+.join-fine{font-size:11px;color:var(--text3);text-align:center;margin-top:12px;line-height:1.5}
+.join-done{text-align:center;padding:24px 8px}
+.join-done-ic{width:52px;height:52px;border-radius:50%;background:rgba(46,217,160,.12);border:1px solid rgba(46,217,160,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.join-done-ic svg{width:24px;height:24px;color:var(--green)}
+.join-done h4{font-size:16px;font-weight:800;color:var(--text);margin-bottom:8px}
+.join-done p{font-size:13px;color:var(--text2);line-height:1.6;max-width:300px;margin:0 auto}
+@media(max-width:880px){.join-inner{grid-template-columns:1fr;gap:36px}}
+
 /* ── FOOTER ── */
 .footer{background:var(--bg2);border-top:1px solid var(--border);padding:52px 28px 32px}
 .footer-inner{max-width:1360px;margin:0 auto}
@@ -411,6 +445,11 @@ body.has-marquee .niches-bar{top:86px}
         <div><div class="hs-val"><b>28</b></div><div class="hs-lbl">Sites</div></div>
         <div><div class="hs-val"><b>11</b></div><div class="hs-lbl">Niches</div></div>
       </div>
+      <div class="hero-trust">
+        <span class="ht"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><polyline points="9 12 11 14 15 10"/></svg>Expert-written</span>
+        <span class="ht"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Editorially reviewed</span>
+        <span class="ht"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Updated daily</span>
+      </div>
     </div>
     <div class="hero-right">
       <div class="hero-feed-label"><span class="hero-feed-live"></span>Latest Articles</div>
@@ -571,6 +610,44 @@ body.has-marquee .niches-bar{top:86px}
   </div>
 </section>
 
+<!-- JOIN / APPLY -->
+<section class="join-wrap" id="apply">
+  <div class="join-inner">
+    <div class="join-left">
+      <div class="join-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>
+        For Publishers
+      </div>
+      <h2 class="join-h2">Apply to join<br>the network.</h2>
+      <p class="join-lead">Run a specialized publication? Submit it for review. Every application is read by our editorial team, and accepted sites become part of the Nexus web, aggregated into one searchable knowledge base.</p>
+      <div class="join-steps">
+        <div class="join-step"><span class="join-step-n">1</span><div><b>Submit your site.</b> Tell us your publication, niche, and where to find it.</div></div>
+        <div class="join-step"><span class="join-step-n">2</span><div><b>We review it.</b> Our editorial team checks quality, originality, and fit, by hand.</div></div>
+        <div class="join-step"><span class="join-step-n">3</span><div><b>You join the web.</b> Accepted publications are aggregated into the live Nexus feed.</div></div>
+      </div>
+    </div>
+    <div class="join-card" id="join-card">
+      <div class="join-card-h">Submit your publication</div>
+      <div class="join-card-sub">Reviewed manually. We only accept sites that meet our editorial bar.</div>
+      <form id="join-form" onsubmit="submitJoin(event)">
+        <div class="join-field"><label>Publication name</label><input type="text" required placeholder="e.g. The Quarterly Ledger"></div>
+        <div class="join-field"><label>Website URL</label><input type="url" required placeholder="https://yourpublication.com"></div>
+        <div class="join-field"><label>Contact email</label><input type="email" required placeholder="you@yourpublication.com"></div>
+        <div class="join-field"><label>Primary niche</label>
+          <select required>
+            <option value="" disabled selected>Select a niche</option>
+            <option>Finance</option><option>Business</option><option>Health &amp; Fitness</option>
+            <option>Lifestyle</option><option>Real Estate</option><option>Technology</option>
+            <option>Travel</option><option>Beauty</option><option>Other</option>
+          </select>
+        </div>
+        <button class="join-submit" type="submit">Submit for review</button>
+        <div class="join-fine">By submitting you agree to an editorial review. We respond to accepted applications privately.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
 <footer class="footer">
   <div class="footer-inner">
     <div class="foot-top">
@@ -693,7 +770,7 @@ const SITES=[
   {id:'sightreadingacademy', name:'Sight Reading Academy', niche:'education', color:'#f5b14d'},
   {id:'dalmend-home', name:'dalmend-home', niche:'home', color:'#78716c'},
   {id:'makeupcraft', name:'Makeup Craft', niche:'beauty', color:'#9f3f55'},
-  {id:'travelverge', name:'travelverge', niche:'travel', color:'#c2410c'},
+  {id:'travelverge', name:'travelverge', niche:'travel', color:'#14b8a6'},
   {id:'mashestate-construction', name:'mashestate-construction', niche:'realestate', color:'#ea580c'},
   {id:'kanona-events', name:'Kanona Projects', niche:'travel', color:'#c9a96e'},
   {id:'topproduct', name:'Topproduct', niche:'business', color:'#dc2626'},
@@ -1267,7 +1344,10 @@ function cleanBody(el,siteId){
    // so leaving the inline one in produces the duplicate "AI Copywriting·May
    // 29, 2026" line shown right under the headline.
    '.ap-kicker','.art-kicker','.kicker','.article-kicker','.byline','.article-byline',
-   '.post-meta','.entry-meta','.article-meta','.meta-row'].forEach(s=>{
+   '.post-meta','.entry-meta','.article-meta','.meta-row',
+   // Strip the article's own end-of-post author card (the Nexus reader already
+   // shows the author in #rauthor above the body), so it isn't shown twice.
+   '.ob-author','.kn-author','.author-card','.author-box','.post-author'].forEach(s=>{
     el.querySelectorAll(s).forEach(n=>n.remove());
   });
   // Strip the article's own headline so we don't render the title twice
@@ -1365,6 +1445,19 @@ function buildTicker(){
 // SUBSCRIBE
 // ──────────────────────────────────────────────
 const HUB_API = (typeof KAVALSIA_HUB_URL !== 'undefined' ? KAVALSIA_HUB_URL : '').replace(/\/$/, '');
+
+function submitJoin(e){
+  e.preventDefault();
+  // Placeholder submit: swap the card for a confirmation. Wire to a real
+  // endpoint (GHL / inbox) when ready.
+  const card=document.getElementById('join-card');
+  if(!card)return;
+  card.innerHTML='<div class="join-done">'
+    +'<div class="join-done-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
+    +'<h4>Application received.</h4>'
+    +'<p>Our editorial team reviews every submission by hand. If your publication is a fit, you will hear from us privately.</p>'
+    +'</div>';
+}
 
 async function subscribe(){
   const inp=document.getElementById('sub-email');

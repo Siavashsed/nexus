@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nexus - The Knowledge Network</title>
-<meta name="description" content="43 specialized publications aggregated into one searchable knowledge base. Finance, health, business, real estate, lifestyle, beauty, travel and more.">
+<meta name="description" content="32 specialized publications aggregated into one searchable knowledge base. Finance, health, business, real estate, lifestyle, beauty, travel and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
@@ -229,14 +229,14 @@ button{font-family:var(--font);cursor:pointer;border:none;background:none}
 .rbody ul,.rbody ol{margin:0 0 22px 26px;line-height:1.85}
 .rbody li{margin-bottom:7px}
 .rbody blockquote{border-left:3px solid #4f8ef7;margin:32px 0;padding:14px 22px;background:#f3f0e8;font-style:italic;color:#666;font-size:18px}
-.rbody img{width:100%;max-width:100%;border-radius:6px;margin:28px 0;display:block}
+.rbody img{width:100%;max-width:100%;max-height:70vh;object-fit:cover;border-radius:6px;margin:28px 0;display:block}
 .rbody strong{color:#16120e;font-weight:700}
 .rbody code{font-family:monospace;background:#eceae4;padding:2px 7px;border-radius:3px;font-size:13px;color:#16120e}
 .rbody table{width:100%;border-collapse:collapse;margin:22px 0;font-size:13px;font-family:var(--font)}
 .rbody th{background:#eceae4;padding:9px 12px;text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#666;border-bottom:2px solid #e4dfd6}
 .rbody td{padding:9px 12px;border-bottom:1px solid #e4dfd6;color:#444}
 /* Drop cap */
-.rbody>p:first-of-type::first-letter{float:left;font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:800;line-height:.72;margin:8px 12px 0 0;color:#1a4731}
+.rbody>p:first-of-type::first-letter{font-size:inherit;float:none;line-height:inherit;margin:0;padding:0;color:inherit;font-weight:inherit}
 .rfoot-bar{border-top:2px solid #e4dfd6;margin-top:56px;padding-top:36px}
 .rattr{background:#f3f0e8;border-radius:8px;padding:18px 22px;display:flex;align-items:center;gap:13px;margin-bottom:36px}
 .rattr-icon{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:12px;font-weight:900;color:#fff;flex-shrink:0}
@@ -420,7 +420,7 @@ body.has-marquee .niches-bar{top:86px}
       <a href="./about.html">About</a>
     </div>
     <div class="nav-r">
-      <span class="nav-count nav-sitebadge"><span class="nav-pulse-dot"></span><strong>43</strong> sites</span>
+      <span class="nav-count nav-sitebadge"><span class="nav-pulse-dot"></span><strong>32</strong> sites</span>
       <span class="nav-count"><strong id="nav-cnt">--</strong> articles</span>
     </div>
   </div>
@@ -433,11 +433,11 @@ body.has-marquee .niches-bar{top:86px}
   <div class="hero-constellation" id="hero-constellation" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-left">
-      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>43 publications - live aggregated feed</div>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>32 publications - live aggregated feed</div>
       <h1 class="hero-h1">Every Insight.<br>One Place.</h1>
-      <p class="hero-sub">Finance, fitness, business, real estate, lifestyle, beauty, travel and more - from 43 specialized publications into one searchable knowledge base.</p>
+      <p class="hero-sub">Finance, fitness, business, real estate, lifestyle, beauty, travel and more - from 32 specialized publications into one searchable knowledge base.</p>
       <div class="hero-search">
-        <input id="hero-sinput" type="text" placeholder="Search across all 43 publications..." oninput="onSearch(this.value);syncNav(this.value)">
+        <input id="hero-sinput" type="text" placeholder="Search across all 32 publications..." oninput="onSearch(this.value);syncNav(this.value)">
         <button onclick="scrollToFeed()">Search</button>
       </div>
       <div class="hero-hs">
@@ -464,7 +464,7 @@ body.has-marquee .niches-bar{top:86px}
 <!-- STAT RIBBON -->
 <section class="stat-ribbon" id="stat-ribbon">
   <div class="stat-ribbon-inner">
-    <div class="stat-cell"><div class="stat-num" data-target="43">0</div><div class="stat-lbl">Publications</div></div>
+    <div class="stat-cell"><div class="stat-num" data-target="32">0</div><div class="stat-lbl">Publications</div></div>
     <div class="stat-cell"><div class="stat-num" data-target="11">0</div><div class="stat-lbl">Niches</div></div>
     <div class="stat-cell"><div class="stat-num" data-target="200" data-suffix="+">0</div><div class="stat-lbl">Contributors</div></div>
     <div class="stat-cell"><div class="stat-num" data-target="1.2" data-decimals="1"><small>M</small></div><div class="stat-lbl">Words Published</div></div>
@@ -478,7 +478,7 @@ body.has-marquee .niches-bar{top:86px}
 </div>
 
 <!-- NETWORK MOSAIC -->
-<!-- "43 publications. One ecosystem." mosaic section removed per user request:
+<!-- "32 publications. One ecosystem." mosaic section removed per user request:
      the network does not surface backlinks to its publications anywhere on
      Nexus. Keep the mosaic-grid JS as a no-op (it just renders into a missing
      element) so the existing scripts do not throw. -->
@@ -511,7 +511,7 @@ body.has-marquee .niches-bar{top:86px}
       Editorial Standards
     </div>
     <h2 class="why-h2">The knowledge network<br>you can trust.</h2>
-    <p class="why-lead">Nexus aggregates expert-written content from 43 specialized publications, each held to strict editorial standards. No clickbait, no filler - only substantive, researched insight across every niche we cover.</p>
+    <p class="why-lead">Nexus aggregates expert-written content from 32 specialized publications, each held to strict editorial standards. No clickbait, no filler - only substantive, researched insight across every niche we cover.</p>
     <div class="why-cols">
       <div class="why-col">
         <div style="height:2px;background:var(--blue);position:absolute;top:0;left:0;right:0"></div>
@@ -519,7 +519,7 @@ body.has-marquee .niches-bar{top:86px}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </div>
         <div class="why-col-h">What is Nexus?</div>
-        <p class="why-col-p">A curated aggregation hub pulling from 43 niche publications across finance, health, business, lifestyle, and more. We surface the best content from each domain into one searchable, always-fresh feed.</p>
+        <p class="why-col-p">A curated aggregation hub pulling from 32 niche publications across finance, health, business, lifestyle, and more. We surface the best content from each domain into one searchable, always-fresh feed.</p>
       </div>
       <div class="why-col">
         <div style="height:2px;background:var(--green);position:absolute;top:0;left:0;right:0"></div>
@@ -541,11 +541,11 @@ body.has-marquee .niches-bar{top:86px}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div class="why-col-h">Who Writes Here?</div>
-        <p class="why-col-p">Our publications are staffed by niche specialists - certified financial planners, licensed trainers, real estate professionals, and domain experts with verifiable credentials in their fields.</p>
+        <p class="why-col-p">Our publications are staffed by niche specialists - personal finance writers, licensed trainers, real estate professionals, and domain experts with verifiable credentials in their fields.</p>
       </div>
     </div>
     <div class="trust-wrap">
-      <div class="trust-head">Editorial frameworks upheld across all 43 publications</div>
+      <div class="trust-head">Editorial frameworks upheld across all 32 publications</div>
       <div class="trust-badges">
         <div class="trust-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>AP Style Guide</div>
         <div class="trust-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Reuters Editorial Standards</div>
@@ -568,7 +568,7 @@ body.has-marquee .niches-bar{top:86px}
 <!-- MAIN FEED -->
 <main class="main" id="main-feed">
   <div id="loading-state">
-    <div class="sec-hd"><div class="sec-title">Loading <span>...</span></div><div class="sec-count" id="load-prog">Connecting to 43 sites</div></div>
+    <div class="sec-hd"><div class="sec-title">Loading <span>...</span></div><div class="sec-count" id="load-prog">Connecting to 32 sites</div></div>
     <div class="loading-grid">
       <div class="skeleton"><div class="sk-top"></div><div class="sk-line" style="width:80%"></div><div class="sk-line" style="width:55%"></div><div class="sk-line" style="width:75%"></div><div class="sk-line" style="width:40%"></div></div>
       <div class="skeleton"><div class="sk-top"></div><div class="sk-line" style="width:65%"></div><div class="sk-line" style="width:85%"></div><div class="sk-line" style="width:50%"></div><div class="sk-line" style="width:35%"></div></div>
@@ -591,7 +591,7 @@ body.has-marquee .niches-bar{top:86px}
     </div>
   </div>
   <div class="sites-section reveal" id="sites-sec" style="display:none">
-    <div class="sec-hd"><div class="sec-title">All <span>43 Publications</span></div><div class="sec-count" id="sites-loaded"></div></div>
+    <div class="sec-hd"><div class="sec-title">All <span>32 Publications</span></div><div class="sec-count" id="sites-loaded"></div></div>
     <div class="sites-grid" id="sites-grid"></div>
   </div>
 </main>
@@ -601,7 +601,7 @@ body.has-marquee .niches-bar{top:86px}
   <div class="sub-inner">
     <div class="sub-eyebrow">Stay updated</div>
     <h2 class="sub-h2">The best reads,<br>delivered weekly.</h2>
-    <p class="sub-p">Get a curated digest of top articles across all 43 Nexus publications - finance, fitness, business, and beyond. No spam, unsubscribe anytime.</p>
+    <p class="sub-p">Get a curated digest of top articles across all 32 Nexus publications - finance, fitness, business, and beyond. No spam, unsubscribe anytime.</p>
     <div class="sub-form">
       <input type="email" placeholder="Your email address" id="sub-email">
       <button class="sub-btn" onclick="subscribe()">Subscribe Free</button>
@@ -653,7 +653,7 @@ body.has-marquee .niches-bar{top:86px}
     <div class="foot-top">
       <div>
         <div class="foot-logo"><div class="foot-logo-m">N</div><div class="foot-brand">Nexus</div></div>
-        <p class="foot-desc">43 specialized publications in one place. Continuously updated from the network.</p>
+        <p class="foot-desc">32 specialized publications in one place. Continuously updated from the network.</p>
       </div>
       <div class="foot-links">
         <div class="foot-col">
@@ -685,7 +685,7 @@ body.has-marquee .niches-bar{top:86px}
     </div>
     <div class="foot-bottom">
       <span>&#169; 2026 Nexus Knowledge Network. Content belongs to respective publications.</span>
-      <span>43 publications - 43 niches</span>
+      <span>32 publications - 32 niches</span>
     </div>
   </div>
 </footer>
@@ -752,6 +752,7 @@ const NICHES=[
   {id:'nightlife',label:'Nightlife',        color:'#ff2bd6', icon:'&#9835;'},
 ];
 const SITES=[
+  {id:'kani', name:'Kani', niche:'business', color:'#137a63'},
   {id:'cryptopulse', name:'Cryptopulse', niche:'finance', color:'#00e676'},
   {id:'tradingtechreview', name:'TradingTech Review', niche:'finance', color:'#58a6ff'},
   {id:'carverge', name:'carverge', niche:'auto', color:'#60a5fa'},
@@ -768,7 +769,7 @@ const SITES=[
   {id:'passivewealthguide', name:'Passive Wealth Guide', niche:'finance', color:'#1a4731'},
   {id:'mochapoo-pets', name:'MochaPoo Pets', niche:'lifestyle', color:'#b45309'},
   {id:'sightreadingacademy', name:'Sight Reading Academy', niche:'education', color:'#f5b14d'},
-  {id:'dalmend-home', name:'dalmend-home', niche:'home', color:'#78716c'},
+  {id:'dalmend-home', name:'Maison Dalmend', niche:'home', color:'#78716c'},
   {id:'makeupcraft', name:'Makeup Craft', niche:'beauty', color:'#9f3f55'},
   {id:'travelverge', name:'travelverge', niche:'travel', color:'#14b8a6'},
   {id:'mashestate-construction', name:'mashestate-construction', niche:'realestate', color:'#ea580c'},
@@ -782,19 +783,7 @@ const SITES=[
   {id:'mindframe', name:'MindFrame', niche:'wellness', color:'#ff5a4e'},
   {id:'agyan', name:'Agyan', niche:'business', color:'#e6b9a6'},
   {id:'apex', name:'Apex Dental Journal', niche:'business', color:'#0f6e6c'},
-  {id:'passive-wealth', name:'Passivewealthguide', niche:'business', color:'#0a0a0a'},
-  {id:'trading-tech', name:'Tradingtechreview', niche:'business', color:'#0a0a0a'},
-  {id:'ai-marketing', name:'ai-marketing', niche:'business', color:'#0a0a0a'},
-  {id:'ecommerce-edge', name:'ecommerce-edge', niche:'business', color:'#0a0a0a'},
-  {id:'supplement-verge', name:'Supplementverge', niche:'business', color:'#0a0a0a'},
-  {id:'sight-reading', name:'Sightreadingacademy', niche:'business', color:'#0a0a0a'},
-  {id:'newborn-iq', name:'Newborniq', niche:'business', color:'#0a0a0a'},
-  {id:'onlinebiz-pro', name:'Onlinebizpro', niche:'business', color:'#0a0a0a'},
-  {id:'sportiq-pro', name:'Sportiqpro', niche:'business', color:'#0a0a0a'},
-  {id:'makeup-craft', name:'Makeupcraft', niche:'business', color:'#0a0a0a'},
-  {id:'dating-edge', name:'The Dating Edge', niche:'business', color:'#0a0a0a'},
-  {id:'fitpulse-pro', name:'fitpulse-pro', niche:'business', color:'#d6ff3f'},
-  {id:'insight-insure', name:'Insight Insure', niche:'business', color:'#0a0a0a'}
+  {id:'orgup-verify-wizard-co-the-kiln-diary', name:'The Kiln Diary', niche:'business', color:'#0a0a0a'}
 ];
 const NM=Object.fromEntries(NICHES.map(n=>[n.id,n]));
 const SM=Object.fromEntries(SITES.map(s=>[s.id,s]));
@@ -1362,8 +1351,19 @@ function cleanBody(el,siteId){
     if (h.tagName === 'H1' && !_h1Dropped) { h.remove(); _h1Dropped = true; return; }
     if (_curTitle && t === _curTitle) h.remove();
   });
+  // Strip bespoke author cards, bylines, discussion and latest-post rails from
+  // ANY site design (cpa-, ttr-, ob-, kn-, bs-, tb-, lf- ...). Class attributes
+  // get removed below, so these blocks would otherwise render unstyled, and
+  // avatar images inside them blow up to full width (the giant-author bug).
+  const CHROME=new Set(['author','authors','byline','ava','avatar','avatars','disc','discussion','comments','comment','latest','related','viewall','share','sidebar','aside','rail']);
+  el.querySelectorAll('[class]').forEach(n=>{
+    const toks=String(n.className).split(/\s+/).flatMap(c=>c.split('-'));
+    if(toks.some(t=>CHROME.has(t.toLowerCase())))n.remove();
+  });
   el.querySelectorAll('img').forEach(img=>{
     const src=img.getAttribute('src')||'';
+    // Avatar-service images are chrome, never content; without their CSS they render huge.
+    if(/dicebear\.com|randomuser\.me|ui-avatars\.com|gravatar\.com/.test(src)){img.remove();return;}
     if(src&&!src.startsWith('http')&&!src.startsWith('data:'))img.src=`https://siavashsed.github.io/${siteId}/${src.replace(/^\//,'')}`;
     img.loading='lazy';img.removeAttribute('class');img.removeAttribute('style');
   });
